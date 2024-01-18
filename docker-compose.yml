@@ -1,0 +1,21 @@
+version: '3.7'
+services:
+  mypayment-paymentgateway:
+    image: mypayment-paymentgateway-dev:latest
+    container_name: mypayment_paymentgateway_webapp
+    volumes:
+      - ./:/app
+    networks:
+      - docker-net
+    environment:
+      - NODE_ENV=development
+    labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=docker-net"
+      - "traefik.http.routers.mypayment-paymentgateway.tls=true"
+      - "traefik.http.routers.mypayment-paymentgateway.rule=Host(`mypayment-paymentgateway.tdkhoa.dev`)"
+      - "traefik.http.routers.mypayment-paymentgateway.entrypoints=websecure"
+      - "traefik.http.services.mypayment-paymentgateway.loadbalancer.server.port=3000"
+networks:
+  docker-net:
+    external: true
